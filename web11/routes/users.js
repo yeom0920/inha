@@ -22,4 +22,9 @@ router.get('/cart', function(req, res, next) {
   res.render('index', { title: '장바구니', pageName:'users/cart.ejs' });
 });
 
+
+// 장바구니 라우터
+router.get('/mypage', function(req, res, next) {
+  res.render('index', { title: '마이페이지', pageName:'users/mypage.ejs' });
+});
 module.exports = router;
