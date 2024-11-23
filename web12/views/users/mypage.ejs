@@ -1,0 +1,79 @@
+<style>
+    .title {
+        width: 200px;
+    }
+
+</style>
+<div class="my-5 row justify-content-center">
+    <h1 class="text-center mb-5">
+        <%=title%>
+    </h1>
+    <form name="frm" class="col-md-8">
+        <div class="input-group mb-3">
+            <div class="input-group-text title justify-content-center">이메일</div>
+            <input name="email" class="form-control" readonly>
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-text title justify-content-center">성명</div>
+            <input name="name" class="form-control" value="영민">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-text title justify-content-center">전화</div>
+            <input name="phone" class="form-control" value="010-0000-0000">
+        </div>
+        <div class="input-group mb-1">
+            <div class="input-group-text title justify-content-center">주소</div>
+            <input name="address1" class="form-control">
+            <button class="btn btn-primary px-3 search" type="button">검색</button>
+        </div>
+        <input name="address2" class="form-control" placeholder="상세주소">
+        <div class="text-center mt-3">
+            <button class="btn btn-primary" type="submit">정보저장</button>
+            <button class="btn btn-secondary" type="reset">저장취소</button>
+        </div>
+    </form> 
+<script type="module">
+import {app} from '/javascripts/config.js'
+import {getDatabase, onValue, ref, set} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js"; //onValue는 데이터베이스에 있는 값을 가져오기 위함 set은 저장 ref 경로
+const db = getDatabase(app); //이제 db를 사용할 수 있음
+
+$(frm.email).val(email);
+//정보읽기
+onValue(ref(db,`users/${uid}`), snapshot=>{
+    const user=snapshot.val();
+    $(frm.name).val(user.name);
+    $(frm.phone).val(user.phone);
+    $(frm.address1).val(user.address1);
+    $(frm.address2).val(user.address2);
+})
+//취소
+$(frm).on("reset",function(e){
+    e.preventDefault();
+    if(confirm("취소하시겠습니까?")){
+        location.reload();
+    }
+});
+//저장버ㅡㄴ 클릭
+$(frm).on("submit",function(e){
+    e.preventDefault();
+    if(confirm("변경한 정보를 수정하실래요?")){
+        //정보수정
+        const user={email,name:$(frm.name).val(), phone:$(frm.phone).val(),address1:$(frm.address1).val(),address2:$(frm.address2).val()}
+        set(ref(db,`users/${uid}`), user);
+        alert("정보저장!");
+    };
+
+})
+
+//검색 버튼 클릭
+    $(".search").on("click", function(){
+        new daum.Postcode({
+            oncomplete: function(data){
+                const address=data.buildingName !=""?
+                `${data.address}(${data.buildingName})`:data.address
+                $(frm.address1).val(address);
+            }
+        }).open();
+    });
+
+</script>
