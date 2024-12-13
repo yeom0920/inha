@@ -106,7 +106,7 @@
         $("#div_reply .view" + id).show();
     });
 
-    //내용이 변경도니 경우
+    //내용이 변경된 경우
     $("#div_reply").on("keyup", ".txtcontents",function(){
         $(this).parent().parent().find(".btn-save").attr("disabled",false);
     });

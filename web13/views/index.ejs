@@ -14,9 +14,19 @@
   <body>
     <div class="container">
       <%-include("top.ejs")%>
-      <%-include("menu.ejs")%>
+      <%-include("menubars.ejs")%>
       <%-include(pageName)%>
       <%-include("bottom.ejs")%>
+      <div id="loading" class="text-center">
+        <div id="spinner" class="spinner-border text-primary" role="status"></div>
+      </div>
     </div>
   </body>
+  <script>
+    $(window).on("load", function(){
+      setTimeout(function(){
+        $("#loading").hide();
+      }, 800);
+    });
+  </script>
 </html>
